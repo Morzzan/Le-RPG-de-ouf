@@ -1,6 +1,7 @@
 package fr.utbm.csanchez.rpg;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,17 +19,17 @@ import fr.utbm.csanchez.utils.VectPerso;
 public class GameManager implements ActionListener {
 
 	private JFrame frame;
-	private JProgressBar HP = new JProgressBar(0, 100);
+	private JProgressBar HP = new JProgressBar();
 	private MapView mv = new MapView(this);
 	private GameMap gm = new GameMap(10, 10);
-	private Hero vous = gm.createHero();
+	private Hero you = gm.createHero();
 
 	public Hero getVous() {
-		return vous;
+		return you;
 	}
 
 	public void setVous(Hero vous) {
-		this.vous = vous;
+		this.you = vous;
 	}
 
 	/**
@@ -90,6 +91,9 @@ public class GameManager implements ActionListener {
 		bottom.add(heroStatus);
 		bottom.add(gameRun);
 		frame.getContentPane().add(bottom, BorderLayout.SOUTH);
+		HP.setStringPainted(true);
+		HP.setForeground(Color.RED);
+		displayHeroStatus();
 
 	}
 
@@ -100,9 +104,16 @@ public class GameManager implements ActionListener {
 				move = new VectPerso(test.getKey());
 			}
 		}
-		vous.go(move);
+		you.go(move);
 		gm.refresh();
 		mv.displayMap(gm);
+		displayHeroStatus();
+	}
+
+	public void displayHeroStatus() {
+		HP.setMaximum(you.getHpMax());
+		HP.setValue(you.getHp());
+		HP.setString(you.getHp() + " / " + you.getHpMax());
 	}
 
 }
