@@ -2,6 +2,7 @@ package fr.utbm.csanchez.rpg;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -65,16 +66,11 @@ public class GameManager implements ActionListener {
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JButton btnRight = new JButton("right");
-		frame.getContentPane().add(btnRight, BorderLayout.WEST);
+		JButton btnRight = new JButton("left");
+		frame.getContentPane().add(btnRight, BorderLayout.EAST);
 
-		JButton btnLeft = new JButton("left");
-		btnLeft.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				HP.setValue(HP.getValue() + 1);
-			}
-		});
-		frame.getContentPane().add(btnLeft, BorderLayout.EAST);
+		InventoryManager iv = new InventoryManager();
+		frame.getContentPane().add(iv, BorderLayout.WEST);
 
 		JLabel lblBienvenueDansLe = new JLabel("Bienvenue dans le jeu");
 		frame.getContentPane().add(lblBienvenueDansLe, BorderLayout.NORTH);
@@ -84,8 +80,10 @@ public class GameManager implements ActionListener {
 		bottom.setLayout(new GridLayout(1, 2));
 		JPanel heroStatus = new JPanel();
 		heroStatus.setLayout(new BoxLayout(heroStatus, BoxLayout.PAGE_AXIS));
-		JLabel gameRun = new JLabel("keskispas dans ce jeu");
-		JLabel heroAttributes = new JLabel("ad , ap, etc");
+		JLabel gameRun = new JLabel("<html><center>keskispas" + " dans ce<br/> jeu</center></html>");
+		JLabel heroAttributes = new JLabel();
+		heroAttributes.setHorizontalAlignment(JLabel.CENTER);
+		heroAttributes.setPreferredSize(new Dimension(frame.getWidth() / 2, frame.getHeight() / 10));
 		heroStatus.add(HP);
 		heroStatus.add(heroAttributes);
 		bottom.add(heroStatus);
@@ -108,6 +106,7 @@ public class GameManager implements ActionListener {
 		gm.refresh();
 		mv.displayMap(gm);
 		displayHeroStatus();
+		mv.askMove();
 	}
 
 	public void displayHeroStatus() {

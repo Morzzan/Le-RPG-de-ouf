@@ -32,18 +32,39 @@ public class MapView extends JPanel {
 				grid.put(new VectPerso(x, y), btn);
 				add(btn);
 				btn.addActionListener(mother);
+				askMove();
+			}
+		}
+	}
+
+	public void askMove() {
+		for (JButton b : this.grid.values()) {
+			b.setEnabled(false);
+		}
+		for (int x = -1; x < 2; x++) {
+			for (int y = -1; y < 2; y++) {
+				VectPerso currentBox = new VectPerso(x, y);
+				JButton btn = this.grid.get(currentBox);
+				if (btn != null && btn.getText() != "█")
+					btn.setEnabled(true);
 			}
 		}
 	}
 
 	public void displayMap(GameMap map) {
 		for (Entry<VectPerso, JButton> currentBox : grid.entrySet()) {
-			VectPerso realBoxPos = currentBox.getKey().add(mother.getVous().getPosition());
+			VectPerso pos = currentBox.getKey();
+			VectPerso realBoxPos = realBoxPos(pos);
 			if (map.getGrid().containsKey(realBoxPos)) {
 				currentBox.getValue().setText(map.getGrid().get(realBoxPos).getRpz());
 			} else {
 				currentBox.getValue().setText("");
 			}
 		}
+	}
+
+	private VectPerso realBoxPos(VectPerso pos) {
+		VectPerso realBoxPos = pos.add(mother.getVous().getPosition());
+		return realBoxPos;
 	}
 }
