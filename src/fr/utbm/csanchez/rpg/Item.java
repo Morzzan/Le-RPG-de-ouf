@@ -23,8 +23,7 @@ public class Item {
 		this.armor = armor;
 	}
 
-	public void use(InventoryManager caller) {
-
+	public void use(GameManager caller) {
 	}
 
 	public void load(JButton btn) {

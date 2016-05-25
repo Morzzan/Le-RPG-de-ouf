@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -100,19 +101,25 @@ public class GameManager implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		VectPerso move = null;
-		for (java.util.Map.Entry<VectPerso, JButton> test : mv.getGrid().entrySet()) {
+		for (Entry<VectPerso, JButton> test : mv.getGrid().entrySet()) {
 			if (test.getValue() == e.getSource()) {
 				move = new VectPerso(test.getKey());
 			}
 		}
-		hero.go(move);
-		refreshDisplay();
+		Item usedNow = mv.getUsingNow();
+		if (usedNow != null) {
+			if (usedNow instanceof Bow) {
+				((Bow) usedNow).fire(move);
+			}
+		} else {
+			hero.go(move);
+		}
 
+		refreshDisplay();
 		mv.askMove();
 	}
 
 	public void refreshDisplay() {
-		gm.refresh();
 		mv.displayMap(gm);
 		iv.synchronizeInventory();
 		displayHeroStatus();
@@ -123,6 +130,10 @@ public class GameManager implements ActionListener {
 		HP.setMaximum(hero.getHpMax());
 		HP.setValue(hero.getHp());
 		HP.setString(hero.getHp() + " / " + hero.getHpMax());
+	}
+
+	public MapView getMv() {
+		return mv;
 	}
 
 }

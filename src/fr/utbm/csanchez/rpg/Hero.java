@@ -49,13 +49,18 @@ public class Hero extends GameEntity implements ItemContainer {
 			Enemy target = (Enemy) toHit;
 			target.setHp(target.getHp() - getAd() * 100 / (100 + target.getArmor()));
 		}
-		if (toHit instanceof Chest) {
+		if (toHit instanceof Chest && hasSpace()) {
 			Chest toPoor = (Chest) toHit;
 			Item newItem = toPoor.poor();
 			this.pickUp(newItem);
 			System.out.println(newItem.toString() + " picked up !");
 		}
 		updatePosition(move);
+		isOnMap.enemyTurn();
+	}
+
+	public boolean hasSpace() {
+		return (inventory.size() < 6);
 	}
 
 	public void showInventory() {

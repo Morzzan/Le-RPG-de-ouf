@@ -10,7 +10,7 @@ public class Potion extends Item {
 		potionCount = number;
 	}
 
-	public void use(InventoryManager caller) {
+	public void use(GameManager caller) {
 		if (owner instanceof Hero) {
 			if (potionCount > 0) {
 				((Hero) owner).setHp(((Hero) owner).getHp() + 15);
@@ -19,6 +19,7 @@ public class Potion extends Item {
 			if (potionCount < 1) {
 				owner.getInventory().remove(this);
 			}
+			((Hero) owner).isOnMap.enemyTurn();
 		}
 	}
 

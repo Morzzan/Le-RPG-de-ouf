@@ -21,6 +21,7 @@ public class MapView extends JPanel {
 
 	private HashMap<VectPerso, JButton> grid = new HashMap<VectPerso, JButton>();
 	private GameManager mother;
+	private Item usingNow;
 
 	public MapView(GameManager mother) {
 		super();
@@ -38,6 +39,7 @@ public class MapView extends JPanel {
 	}
 
 	public void askMove() {
+		usingNow = null;
 		for (JButton b : this.grid.values()) {
 			b.setEnabled(false);
 		}
@@ -51,8 +53,17 @@ public class MapView extends JPanel {
 		}
 	}
 
-	public void askTarget() {
-
+	public void askTarget(Item it) {
+		usingNow = it;
+		for (Entry<VectPerso, JButton> currentBox : grid.entrySet()) {
+			JButton btn = currentBox.getValue();
+			VectPerso pos = currentBox.getKey();
+			if (pos.getX() == 0 ^ pos.getY() == 0) {
+				btn.setEnabled(true);
+			} else {
+				btn.setEnabled(false);
+			}
+		}
 	}
 
 	public void displayMap(GameMap map) {
@@ -70,5 +81,13 @@ public class MapView extends JPanel {
 	private VectPerso realBoxPos(VectPerso pos) {
 		VectPerso realBoxPos = pos.add(mother.getVous().getPosition());
 		return realBoxPos;
+	}
+
+	public Item getUsingNow() {
+		return usingNow;
+	}
+
+	public void setUsingNow(Item usingNow) {
+		this.usingNow = usingNow;
 	}
 }

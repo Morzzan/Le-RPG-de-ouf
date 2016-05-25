@@ -28,7 +28,7 @@ public class GameMap {
 		this.height = height;
 		grid = new HashMap<VectPerso, Element>();
 		createWalls();
-		this.enemyGen(3);
+		this.enemyGen(8);
 	}
 
 	public HashMap<VectPerso, Element> getGrid() {
@@ -50,7 +50,7 @@ public class GameMap {
 		return new Hero(this, 100, 100, new VectPerso(3, 3), 2);
 	}
 
-	public void refresh() {
+	public void enemyTurn() {
 		List<VectPerso> enemyPosition = new Stack<VectPerso>();
 		for (Entry<VectPerso, Element> e : grid.entrySet()) {
 			if (e.getValue() instanceof Enemy) {
