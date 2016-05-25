@@ -1,5 +1,13 @@
 package fr.utbm.csanchez.rpg;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
 public class Item {
 	protected ItemContainer owner;
 	private String name;
@@ -15,8 +23,19 @@ public class Item {
 		this.armor = armor;
 	}
 
-	public void use() {
+	public void use(InventoryManager caller) {
 
+	}
+
+	public void load(JButton btn) {
+		Image img = null;
+		try {
+			img = ImageIO.read(new File(getName() + ".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		btn.setIcon(new ImageIcon(img));
+		btn.setEnabled(true);
 	}
 
 	public String toString() {

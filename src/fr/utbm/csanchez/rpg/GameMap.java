@@ -70,20 +70,6 @@ public class GameMap {
 		grid.put(v, toSet);
 	}
 
-	public static void main(String Args[]) {
-		GameMap test = new GameMap(15, 10);
-		Hero moi = test.createHero();
-		new Chest(test, new VectPerso(2, 2));
-
-		test.show(moi);
-		while (moi.getHp() > 0) {
-			moi.heroTurn();
-			test.refresh();
-			test.show(moi);
-		}
-		System.out.println("Game Over");
-	}
-
 	public void rm(VectPerso v) {
 		grid.remove(v);
 	}

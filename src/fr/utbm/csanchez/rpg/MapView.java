@@ -51,6 +51,10 @@ public class MapView extends JPanel {
 		}
 	}
 
+	public void askTarget() {
+
+	}
+
 	public void displayMap(GameMap map) {
 		for (Entry<VectPerso, JButton> currentBox : grid.entrySet()) {
 			VectPerso pos = currentBox.getKey();

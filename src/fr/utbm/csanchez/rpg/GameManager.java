@@ -23,14 +23,19 @@ public class GameManager implements ActionListener {
 	private JProgressBar HP = new JProgressBar();
 	private MapView mv = new MapView(this);
 	private GameMap gm = new GameMap(10, 10);
-	private Hero you = gm.createHero();
+	private Hero hero = gm.createHero();
+	private InventoryManager iv = new InventoryManager(this);
+
+	public Hero getHero() {
+		return hero;
+	}
 
 	public Hero getVous() {
-		return you;
+		return hero;
 	}
 
 	public void setVous(Hero vous) {
-		this.you = vous;
+		this.hero = vous;
 	}
 
 	/**
@@ -68,8 +73,6 @@ public class GameManager implements ActionListener {
 
 		JButton btnRight = new JButton("left");
 		frame.getContentPane().add(btnRight, BorderLayout.EAST);
-
-		InventoryManager iv = new InventoryManager();
 		frame.getContentPane().add(iv, BorderLayout.WEST);
 
 		JLabel lblBienvenueDansLe = new JLabel("Bienvenue dans le jeu");
@@ -81,8 +84,9 @@ public class GameManager implements ActionListener {
 		JPanel heroStatus = new JPanel();
 		heroStatus.setLayout(new BoxLayout(heroStatus, BoxLayout.PAGE_AXIS));
 		JLabel gameRun = new JLabel("<html><center>keskispas" + " dans ce<br/> jeu</center></html>");
-		JLabel heroAttributes = new JLabel();
-		heroAttributes.setHorizontalAlignment(JLabel.CENTER);
+		JLabel heroAttributes = new JLabel(
+				"<html><center>AD : " + hero.getAd() + "<br/>Armor : " + hero.getArmor() + "</center></html>");
+		heroAttributes.setHorizontalTextPosition(JLabel.CENTER);
 		heroAttributes.setPreferredSize(new Dimension(frame.getWidth() / 2, frame.getHeight() / 10));
 		heroStatus.add(HP);
 		heroStatus.add(heroAttributes);
@@ -91,8 +95,7 @@ public class GameManager implements ActionListener {
 		frame.getContentPane().add(bottom, BorderLayout.SOUTH);
 		HP.setStringPainted(true);
 		HP.setForeground(Color.RED);
-		displayHeroStatus();
-
+		refreshDisplay();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -102,17 +105,24 @@ public class GameManager implements ActionListener {
 				move = new VectPerso(test.getKey());
 			}
 		}
-		you.go(move);
-		gm.refresh();
-		mv.displayMap(gm);
-		displayHeroStatus();
+		hero.go(move);
+		refreshDisplay();
+
 		mv.askMove();
 	}
 
+	public void refreshDisplay() {
+		gm.refresh();
+		mv.displayMap(gm);
+		iv.synchronizeInventory();
+		displayHeroStatus();
+		iv.synchronizeInventory();
+	}
+
 	public void displayHeroStatus() {
-		HP.setMaximum(you.getHpMax());
-		HP.setValue(you.getHp());
-		HP.setString(you.getHp() + " / " + you.getHpMax());
+		HP.setMaximum(hero.getHpMax());
+		HP.setValue(hero.getHp());
+		HP.setString(hero.getHp() + " / " + hero.getHpMax());
 	}
 
 }

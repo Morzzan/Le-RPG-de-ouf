@@ -3,7 +3,6 @@ package fr.utbm.csanchez.rpg;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.utbm.csanchez.utils.InterfaceVitef;
 import fr.utbm.csanchez.utils.VectPerso;
 
 public class Hero extends GameEntity implements ItemContainer {
@@ -48,8 +47,7 @@ public class Hero extends GameEntity implements ItemContainer {
 		Element toHit = isOnMap.getElement(newPosition);
 		if (toHit instanceof Enemy) {
 			Enemy target = (Enemy) toHit;
-			target.setHp(target.getHp() - getAd() * 100
-					/ (100 + target.getArmor()));
+			target.setHp(target.getHp() - getAd() * 100 / (100 + target.getArmor()));
 		}
 		if (toHit instanceof Chest) {
 			Chest toPoor = (Chest) toHit;
@@ -69,20 +67,7 @@ public class Hero extends GameEntity implements ItemContainer {
 	}
 
 	public String toString() {
-		return "HeroStats : HP : " + getHp() + "/" + getHpMax() + "\tAD :"
-				+ getAd() + "\tArmor : " + getArmor();
+		return "HeroStats : HP : " + getHp() + "/" + getHpMax() + "\tAD :" + getAd() + "\tArmor : " + getArmor();
 	}
 
-	public void heroTurn() {
-		InterfaceVitef ask = new InterfaceVitef();
-		VectPerso move = null;
-		move = ask.askMove("all");
-		if (move.getY() != 2) {
-			go(move);
-		} else {
-			int objectId = move.getX();
-			Item object = inventory.get(objectId);
-			object.use();
-		}
-	}
 }
