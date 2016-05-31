@@ -1,5 +1,6 @@
 package fr.utbm.csanchez.utils;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class VectPerso {
@@ -12,6 +13,22 @@ public class VectPerso {
 
 	public int getX() {
 		return x;
+	}
+
+	public void randVect(int max, int min) {
+		Random rand = new Random();
+		int n = rand.nextInt(max - min) + min;
+		this.x = n;
+		int m = rand.nextInt(max - min) + min;
+		this.y = m;
+	}
+
+	public void randVectInRoom(VectPerso size, VectPerso bottomLeft) {
+		Random rand = new Random();
+		int n = rand.nextInt(size.getX() - 1) + bottomLeft.getX();
+		this.x = n;
+		int m = rand.nextInt(size.getY() - 1) + bottomLeft.getY();
+		this.y = m;
 	}
 
 	public void setX(int x) {

@@ -22,7 +22,7 @@ public class GameManager implements ActionListener {
 	private JFrame frame;
 	private JProgressBar HP = new JProgressBar();
 	private MapView mv = new MapView(this);
-	private GameMap gm = new GameMap(10, 10);
+	private GameMap gm = new GameMap(100, 100, 50);
 	private Hero hero = gm.createHero();
 	private InventoryManager iv = new InventoryManager(this);
 	private JLabel gameRun = new JLabel();

@@ -9,7 +9,7 @@ public class Wand extends Item {
 	}
 
 	public void use(GameManager caller) {
-		caller.getMv().askBlow(this, 2);
+		caller.getMv().askBlow(this, 4);
 	}
 
 	public void fire(VectPerso move) {

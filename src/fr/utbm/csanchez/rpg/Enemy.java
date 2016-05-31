@@ -23,7 +23,7 @@ public class Enemy extends GameEntity {
 	public void die() {
 		isOnMap.rm(getPosition());
 		Random rand = new Random();
-		if (rand.nextInt(4) == 0) {
+		if (rand.nextInt(3) == 0) {
 			new Chest(isOnMap, getPosition());
 		}
 	}
