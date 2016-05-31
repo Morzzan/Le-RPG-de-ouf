@@ -1,5 +1,6 @@
 package fr.utbm.csanchez.utils;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class VectPerso {
@@ -54,17 +55,14 @@ public class VectPerso {
 
 		for (int i = 0; i < 2; i++) {
 			table[i] = new VectPerso();
-			System.out.println("Entrez la coordonnée en x du vecteur v"
-					+ (i + 1));
+			System.out.println("Entrez la coordonnée en x du vecteur v" + (i + 1));
 			table[i].x = sc.nextInt();
-			System.out.println("Entrez la coordonnée en y du vecteur v"
-					+ (i + 1));
+			System.out.println("Entrez la coordonnée en y du vecteur v" + (i + 1));
 			table[i].y = sc.nextInt();
 		}
 		table[2] = table[1].add(table[0]);
 		for (int i = 0; i < 3; i++) {
-			System.out.println("Vector V" + i + 1 + " x = " + table[i].x
-					+ " y = " + table[i].y);
+			System.out.println("Vector V" + i + 1 + " x = " + table[i].x + " y = " + table[i].y);
 		}
 	}
 
@@ -82,6 +80,22 @@ public class VectPerso {
 
 	public void print() {
 		System.out.println("x = " + x + "y = " + y + " length = " + length());
+	}
+
+	public void randVect(int max, int min) {
+		Random rand = new Random();
+		int n = rand.nextInt(max - min) + min;
+		this.x = n;
+		int m = rand.nextInt(max - min) + min;
+		this.y = m;
+	}
+
+	public void randVectInRoom(VectPerso size, VectPerso bottomLeft) {
+		Random rand = new Random();
+		int n = rand.nextInt(size.getX() - 1) + bottomLeft.getX();
+		this.x = n;
+		int m = rand.nextInt(size.getY() - 1) + bottomLeft.getY();
+		this.y = m;
 	}
 
 	@Override

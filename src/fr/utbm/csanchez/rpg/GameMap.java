@@ -23,27 +23,104 @@ public class GameMap {
 	 * @param width
 	 * @param height
 	 */
-	GameMap(int width, int height) {
+	GameMap(int width, int height, int n) {
 		this.width = width;
 		this.height = height;
 		grid = new HashMap<VectPerso, Element>();
-		createWalls();
+
+		fillWalls();
+
+		VectPerso test = new VectPerso();
+
+		for (int g = 1; g < 10; g++) {
+			test.setX(g);
+			for (int y = 1; y < 10; y++) {
+				test.setY(y);
+				this.grid.remove(test);
+			}
+		}
+
+		createRoom(new VectPerso(10, 10), new VectPerso(1, 1));
+
+		VectPerso[] roomSpot = new VectPerso[n];
+		VectPerso size = new VectPerso();
+		VectPerso bottomLeft = new VectPerso();
+
+		for (int i = 0; i < n; i++) {
+			size.randVect(15, 5);
+			bottomLeft.randVect(Math.min(width - size.getX() + 1, height - size.getY() + 1), 2);
+			this.createRoom(size, bottomLeft);
+			roomSpot[i] = new VectPerso();
+			roomSpot[i].randVectInRoom(size, bottomLeft);
+		}
+
+		buildCorridor(new VectPerso(3, 3), roomSpot[0]);
+
+		for (int io = 0; io < n - 1; io++) {
+			buildCorridor(roomSpot[io], roomSpot[io + 1]);
+		}
+
+		createRoom(new VectPerso(10, 10), new VectPerso(width - 11, height - 11));
+
+		buildCorridor(roomSpot[n - 1], new VectPerso(width - 5, height - 5));
+
 		this.enemyGen(3);
+	}
+
+	private void fillWalls() {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				new Element("W", this, new VectPerso(i, j));
+				new Element("W", this, new VectPerso(i, j));
+			}
+		}
+	}
+
+	private void createRoom(VectPerso size, VectPerso bottomLeft) {
+
+		VectPerso vect = new VectPerso();
+
+		for (int i = bottomLeft.getX(); i < bottomLeft.getX() + size.getX() - 1; i++) {
+			vect.setX(i);
+			for (int j = bottomLeft.getY(); j < bottomLeft.getY() + size.getY() - 1; j++) {
+				vect.setY(j);
+				this.grid.remove(vect);
+			}
+		}
+	}
+
+	private void buildCorridor(VectPerso one, VectPerso two) {
+		Random rand = new Random();
+		int n = rand.nextInt(2);
+		VectPerso vectRemover = new VectPerso();
+		if (n == 2) {
+			vectRemover.setY(one.getY());
+			for (int m = Math.min(one.getX(), two.getX()); m < Math.max(one.getX(), two.getX()) + 1; m++) {
+				vectRemover.setX(m);
+				this.grid.remove(vectRemover);
+			}
+			vectRemover.setX(two.getX());
+			for (int l = Math.min(one.getY(), two.getY()); l < Math.max(two.getY(), one.getY()) + 1; l++) {
+				vectRemover.setY(l);
+				this.grid.remove(vectRemover);
+			}
+		} else {
+			vectRemover.setX(one.getX());
+			for (int o = Math.min(one.getY(), two.getY()); o < Math.max(two.getY(), one.getY()) + 1; o++) {
+				vectRemover.setY(o);
+				this.grid.remove(vectRemover);
+			}
+			vectRemover.setY(two.getY());
+			for (int k = Math.min(one.getX(), two.getX()); k < Math.max(one.getX(), two.getX()) + 1; k++) {
+				vectRemover.setX(k);
+				this.grid.remove(vectRemover);
+			}
+
+		}
 	}
 
 	public HashMap<VectPerso, Element> getGrid() {
 		return grid;
-	}
-
-	private void createWalls() {
-		for (int i = 0; i < width; i++) {
-			new Element("█", this, new VectPerso(i, 0));
-			new Element("█", this, new VectPerso(i, height - 1));
-		}
-		for (int j = 0; j < height; j++) {
-			new Element("█", this, new VectPerso(0, j));
-			new Element("█", this, new VectPerso(width - 1, j));
-		}
 	}
 
 	public Hero createHero() {
@@ -71,7 +148,7 @@ public class GameMap {
 	}
 
 	public static void main(String Args[]) {
-		GameMap test = new GameMap(15, 10);
+		GameMap test = new GameMap(80, 50, 8);
 		Hero moi = test.createHero();
 		new Chest(test, new VectPerso(2, 2));
 
