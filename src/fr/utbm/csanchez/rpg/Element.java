@@ -1,5 +1,7 @@
 package fr.utbm.csanchez.rpg;
 
+import java.io.Serializable;
+
 import fr.utbm.csanchez.utils.VectPerso;
 
 /**
@@ -7,7 +9,11 @@ import fr.utbm.csanchez.utils.VectPerso;
  * @author morzzan
  * 
  */
-public class Element {
+public class Element implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected String rpz;
 	protected GameMap isOnMap;
 	protected VectPerso position;

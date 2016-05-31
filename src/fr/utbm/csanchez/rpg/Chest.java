@@ -1,11 +1,16 @@
 package fr.utbm.csanchez.rpg;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.utbm.csanchez.utils.VectPerso;
 
-public class Chest extends Element implements ItemContainer {
+public class Chest extends Element implements ItemContainer, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<Item> inventory;
 
 	public Chest(GameMap map, VectPerso position) {

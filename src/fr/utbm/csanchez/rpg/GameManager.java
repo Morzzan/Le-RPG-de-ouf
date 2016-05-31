@@ -7,6 +7,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map.Entry;
 
 import javax.swing.JButton;
@@ -26,9 +31,39 @@ public class GameManager implements ActionListener {
 	private Hero hero = gm.createHero();
 	private InventoryManager iv = new InventoryManager(this);
 	private JLabel gameRun = new JLabel();
+	private JLabel heroAttributes = new JLabel();
 
 	public Hero getHero() {
 		return hero;
+	}
+
+	public void save() {
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(new FileOutputStream("Ressources/Save.ser"));
+			oos.writeObject(gm);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void load() {
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(new FileInputStream("Ressources/Save.ser"));
+			try {
+				gm = (GameMap) ois.readObject();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ois.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setVous(Hero vous) {
@@ -92,8 +127,6 @@ public class GameManager implements ActionListener {
 			bottom.add(gameRun, constraints);
 		}
 		{
-			JLabel heroAttributes = new JLabel(
-					"<html><center>AD : " + hero.getAd() + "<br/>Armor : " + hero.getArmor() + "</center></html>");
 			GridBagConstraints constraints = new GridBagConstraints();
 			constraints.weightx = 1;
 			constraints.weighty = 1;
@@ -121,9 +154,15 @@ public class GameManager implements ActionListener {
 		} else {
 			hero.go(move);
 		}
-
 		refreshDisplay();
-		mv.askMove();
+		if (hero.getHp() != 0) {
+			mv.askMove();
+		} else {
+			for (JButton btn : mv.getGrid().values()) {
+				btn.setEnabled(false);
+			}
+			gameRun.setText("Game Over");
+		}
 	}
 
 	public void refreshDisplay() {
@@ -137,6 +176,9 @@ public class GameManager implements ActionListener {
 		HP.setValue(hero.getHp());
 		HP.setString(hero.getHp() + " / " + hero.getHpMax());
 		gameRun.setText("Turn number" + gm.getCurrentTurn());
+		heroAttributes.setText("<html><center>AD : " + hero.getAd() + "<br/>Armor : " + hero.getArmor() + " ("
+				+ Math.round((1 - 100 / (100 + (double) hero.getArmor())) * 100.0) + "%)</center></html>");
+
 	}
 
 	public MapView getMv() {

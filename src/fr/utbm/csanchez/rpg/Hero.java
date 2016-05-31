@@ -1,11 +1,16 @@
 package fr.utbm.csanchez.rpg;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.utbm.csanchez.utils.VectPerso;
 
-public class Hero extends GameEntity implements ItemContainer {
+public class Hero extends GameEntity implements Serializable, ItemContainer {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<Item> inventory;
 
 	Hero(GameMap map, int hp, int ad, VectPerso position, int potionCount) {
@@ -50,11 +55,15 @@ public class Hero extends GameEntity implements ItemContainer {
 			Enemy target = (Enemy) toHit;
 			target.takeHit(getAd());
 		}
-		if (toHit instanceof Chest && hasSpace()) {
+		if (toHit instanceof Chest) {
 			Chest toPoor = (Chest) toHit;
-			Item newItem = toPoor.poor();
-			this.pickUp(newItem);
-			System.out.println(newItem.toString() + " picked up !");
+			if (hasSpace()) {
+				this.pickUp(toPoor.poor());
+			} else {
+				if (toPoor.getInventory().get(0) instanceof Potion && hasPotion() != null) {
+					this.pickUp(toPoor.poor());
+				}
+			}
 		}
 		updatePosition(move);
 		isOnMap.enemyTurn();

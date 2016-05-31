@@ -1,10 +1,15 @@
 package fr.utbm.csanchez.rpg;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import fr.utbm.csanchez.utils.VectPerso;
 
-public class Enemy extends GameEntity {
+public class Enemy extends GameEntity implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public EnemyStatus status;
 
 	public Enemy(GameMap map, VectPerso v) {
@@ -77,7 +82,7 @@ public class Enemy extends GameEntity {
 	}
 
 	private void patrol() {
-		VectPerso around = lookAround(4);
+		VectPerso around = lookAround(6);
 		Random rand = new Random();
 		if (around == null || rand.nextInt(10) < 3) {
 			randomPatrol();

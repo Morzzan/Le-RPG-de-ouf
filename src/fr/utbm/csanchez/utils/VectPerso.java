@@ -1,9 +1,10 @@
 package fr.utbm.csanchez.utils;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.util.Scanner;
 
-public class VectPerso {
+public class VectPerso implements Serializable {
 	@Override
 	public String toString() {
 		return "Vector [x=" + x + ", y=" + y + "]";

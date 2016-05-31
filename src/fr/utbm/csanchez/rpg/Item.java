@@ -3,6 +3,7 @@ package fr.utbm.csanchez.rpg;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -10,7 +11,11 @@ import javax.swing.JButton;
 
 import fr.utbm.csanchez.utils.VectPerso;
 
-public class Item {
+public class Item implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected ItemContainer owner;
 	private String name;
 	private int hp;

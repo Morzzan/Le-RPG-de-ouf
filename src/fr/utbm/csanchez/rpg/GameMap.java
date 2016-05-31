@@ -1,5 +1,6 @@
 package fr.utbm.csanchez.rpg;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -13,7 +14,11 @@ import fr.utbm.csanchez.utils.VectPerso;
  * @author morzzan
  * 
  */
-public class GameMap {
+public class GameMap implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private HashMap<VectPerso, Element> grid;
 	private int height;
 	private int width;
@@ -68,6 +73,8 @@ public class GameMap {
 		createRoom(new VectPerso(10, 10), new VectPerso(width - 11, height - 11));
 
 		buildCorridor(roomSpot[n - 1], new VectPerso(width - 5, height - 5));
+		ItemStock its = new ItemStock();
+		grid.put(new VectPerso(4, 4), new Chest(this, new VectPerso(4, 4), its.getItemList()));
 
 		this.enemyGen(200);
 	}

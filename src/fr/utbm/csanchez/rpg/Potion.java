@@ -1,8 +1,14 @@
 package fr.utbm.csanchez.rpg;
 
+import java.io.Serializable;
+
 import javax.swing.JButton;
 
-public class Potion extends Item {
+public class Potion extends Item implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int potionCount;
 
 	public Potion(ItemContainer owner, int number) {

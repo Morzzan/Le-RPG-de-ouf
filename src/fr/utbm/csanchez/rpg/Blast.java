@@ -1,8 +1,14 @@
 package fr.utbm.csanchez.rpg;
 
+import java.io.Serializable;
+
 import fr.utbm.csanchez.utils.VectPerso;
 
-public class Blast {
+public class Blast implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int blowingDate;
 	private VectPerso target;
 	private Hero caster;
@@ -15,7 +21,7 @@ public class Blast {
 
 	public void blow() {
 		Element victim = caster.isOnMap.getElement(target);
-		if (victim != caster&&victim!=null) {
+		if (victim != caster && victim != null) {
 			victim.takeHit(caster.getAd() * 3);
 		}
 	}
