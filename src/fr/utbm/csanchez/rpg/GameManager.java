@@ -2,14 +2,13 @@ package fr.utbm.csanchez.rpg;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map.Entry;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,12 +25,9 @@ public class GameManager implements ActionListener {
 	private GameMap gm = new GameMap(10, 10);
 	private Hero hero = gm.createHero();
 	private InventoryManager iv = new InventoryManager(this);
+	private JLabel gameRun = new JLabel();
 
 	public Hero getHero() {
-		return hero;
-	}
-
-	public Hero getVous() {
 		return hero;
 	}
 
@@ -71,28 +67,41 @@ public class GameManager implements ActionListener {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		JButton btnRight = new JButton("left");
-		frame.getContentPane().add(btnRight, BorderLayout.EAST);
 		frame.getContentPane().add(iv, BorderLayout.WEST);
-
-		JLabel lblBienvenueDansLe = new JLabel("Bienvenue dans le jeu");
-		frame.getContentPane().add(lblBienvenueDansLe, BorderLayout.NORTH);
 
 		frame.getContentPane().add(mv, BorderLayout.CENTER);
 		JPanel bottom = new JPanel();
-		bottom.setLayout(new GridLayout(1, 2));
-		JPanel heroStatus = new JPanel();
-		heroStatus.setLayout(new BoxLayout(heroStatus, BoxLayout.PAGE_AXIS));
-		JLabel gameRun = new JLabel("<html><center>keskispas" + " dans ce<br/> jeu</center></html>");
-		JLabel heroAttributes = new JLabel(
-				"<html><center>AD : " + hero.getAd() + "<br/>Armor : " + hero.getArmor() + "</center></html>");
-		heroAttributes.setHorizontalTextPosition(JLabel.CENTER);
-		heroAttributes.setPreferredSize(new Dimension(frame.getWidth() / 2, frame.getHeight() / 10));
-		heroStatus.add(HP);
-		heroStatus.add(heroAttributes);
-		bottom.add(heroStatus);
-		bottom.add(gameRun);
+
+		bottom.setLayout(new GridBagLayout());
+		{
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.weightx = 1;
+			constraints.weighty = 1;
+			constraints.gridx = 0;
+			constraints.gridy = 0;
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			bottom.add(HP, constraints);
+		}
+		{
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.weightx = 1;
+			constraints.weighty = 1;
+			constraints.gridx = 1;
+			constraints.gridy = 1;
+			constraints.fill = GridBagConstraints.BOTH;
+			bottom.add(gameRun, constraints);
+		}
+		{
+			JLabel heroAttributes = new JLabel(
+					"<html><center>AD : " + hero.getAd() + "<br/>Armor : " + hero.getArmor() + "</center></html>");
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.weightx = 1;
+			constraints.weighty = 1;
+			constraints.gridx = 0;
+			constraints.gridy = 1;
+			constraints.fill = GridBagConstraints.BOTH;
+			bottom.add(heroAttributes, constraints);
+		}
 		frame.getContentPane().add(bottom, BorderLayout.SOUTH);
 		HP.setStringPainted(true);
 		HP.setForeground(Color.RED);
@@ -108,9 +117,7 @@ public class GameManager implements ActionListener {
 		}
 		Item usedNow = mv.getUsingNow();
 		if (usedNow != null) {
-			if (usedNow instanceof Bow) {
-				((Bow) usedNow).fire(move);
-			}
+			usedNow.fire(move);
 		} else {
 			hero.go(move);
 		}
@@ -121,7 +128,6 @@ public class GameManager implements ActionListener {
 
 	public void refreshDisplay() {
 		mv.displayMap(gm);
-		iv.synchronizeInventory();
 		displayHeroStatus();
 		iv.synchronizeInventory();
 	}
@@ -130,6 +136,7 @@ public class GameManager implements ActionListener {
 		HP.setMaximum(hero.getHpMax());
 		HP.setValue(hero.getHp());
 		HP.setString(hero.getHp() + " / " + hero.getHpMax());
+		gameRun.setText("Turn number" + gm.getCurrentTurn());
 	}
 
 	public MapView getMv() {

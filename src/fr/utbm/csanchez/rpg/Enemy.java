@@ -62,8 +62,7 @@ public class Enemy extends GameEntity {
 
 	public EnemyStatus getRandomStatus() {
 		Random rand = new Random();
-		EnemyStatus newStatus = EnemyStatus.values()[rand.nextInt(EnemyStatus
-				.values().length)];
+		EnemyStatus newStatus = EnemyStatus.values()[rand.nextInt(EnemyStatus.values().length)];
 		return newStatus;
 	}
 
@@ -72,14 +71,13 @@ public class Enemy extends GameEntity {
 		Element toHit = isOnMap.getElement(newPosition);
 		if (toHit instanceof Hero) {
 			Hero target = (Hero) toHit;
-			target.setHp(target.getHp() - getAd() * 100
-					/ (100 + target.getArmor()));
+			target.takeHit(getAd());
 		}
 		updatePosition(move);
 	}
 
 	private void patrol() {
-		VectPerso around = lookAround(2);
+		VectPerso around = lookAround(4);
 		Random rand = new Random();
 		if (around == null || rand.nextInt(10) < 3) {
 			randomPatrol();

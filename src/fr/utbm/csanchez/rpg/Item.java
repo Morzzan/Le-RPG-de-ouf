@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import fr.utbm.csanchez.utils.VectPerso;
+
 public class Item {
 	protected ItemContainer owner;
 	private String name;
@@ -39,6 +41,10 @@ public class Item {
 
 	public String toString() {
 		return name + "\tHP = " + hp + "\tAD = " + ad + "\t Armor = " + armor;
+	}
+
+	public void fire(VectPerso v) {
+
 	}
 
 	public String getName() {

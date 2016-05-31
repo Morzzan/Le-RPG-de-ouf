@@ -1,7 +1,9 @@
 package fr.utbm.csanchez.rpg;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.swing.JButton;
@@ -66,20 +68,44 @@ public class MapView extends JPanel {
 		}
 	}
 
+	public void askBlow(Item it, int range) {
+		usingNow = it;
+		for (Entry<VectPerso, JButton> currentBox : grid.entrySet()) {
+			JButton btn = currentBox.getValue();
+			VectPerso pos = currentBox.getKey();
+			if (pos.getX() <= range && pos.getX() >= -range && pos.getY() <= range && pos.getY() >= -range) {
+				btn.setEnabled(true);
+			} else {
+				btn.setEnabled(false);
+			}
+		}
+	}
+
 	public void displayMap(GameMap map) {
 		for (Entry<VectPerso, JButton> currentBox : grid.entrySet()) {
 			VectPerso pos = currentBox.getKey();
 			VectPerso realBoxPos = realBoxPos(pos);
+			currentBox.getValue().setBackground(null);
 			if (map.getGrid().containsKey(realBoxPos)) {
 				currentBox.getValue().setText(map.getGrid().get(realBoxPos).getRpz());
 			} else {
 				currentBox.getValue().setText("");
 			}
 		}
+		VectPerso hpos = mother.getHero().getPosition();
+		List<Blast> actionList = map.getdAL().getToOccur();
+		for (Blast d : actionList) {
+			VectPerso target = d.getTarget().minus(hpos);
+			JButton tricked = grid.get(target);
+			if (tricked != null) {
+				tricked.setBackground(Color.RED);
+			}
+
+		}
 	}
 
 	private VectPerso realBoxPos(VectPerso pos) {
-		VectPerso realBoxPos = pos.add(mother.getVous().getPosition());
+		VectPerso realBoxPos = pos.add(mother.getHero().getPosition());
 		return realBoxPos;
 	}
 

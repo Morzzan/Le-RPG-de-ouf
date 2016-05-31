@@ -29,7 +29,9 @@ public class Bow extends Item {
 			arrow = arrow.add(direction);
 		}
 		Element target = hOwner.isOnMap.getElement(arrow);
-		target.setHp(target.getHp() - hOwner.getAd() * 50 / (100 + target.getArmor()));
+		target.takeHit(hOwner.getAd());
+		if (target instanceof Enemy)
+			((Enemy) target).setStatus(EnemyStatus.patroling);
 		hOwner.isOnMap.enemyTurn();
 	}
 }

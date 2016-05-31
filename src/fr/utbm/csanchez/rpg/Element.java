@@ -42,6 +42,10 @@ public class Element {
 	public void evolve() {
 	}
 
+	public void takeHit(int damage) {
+		setHp(getHp() - damage * 100 / (100 + getArmor()));
+	}
+
 	public void setHp(int Hp) {
 	}
 

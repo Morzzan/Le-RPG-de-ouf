@@ -48,23 +48,27 @@ public class VectPerso {
 		return n;
 	}
 
+	public VectPerso minus(VectPerso v) {
+		VectPerso n = new VectPerso();
+		n.x = x - v.x;
+		n.y = y - v.y;
+		return n;
+	}
+
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		VectPerso[] table = new VectPerso[3];
 
 		for (int i = 0; i < 2; i++) {
 			table[i] = new VectPerso();
-			System.out.println("Entrez la coordonnée en x du vecteur v"
-					+ (i + 1));
+			System.out.println("Entrez la coordonnée en x du vecteur v" + (i + 1));
 			table[i].x = sc.nextInt();
-			System.out.println("Entrez la coordonnée en y du vecteur v"
-					+ (i + 1));
+			System.out.println("Entrez la coordonnée en y du vecteur v" + (i + 1));
 			table[i].y = sc.nextInt();
 		}
 		table[2] = table[1].add(table[0]);
 		for (int i = 0; i < 3; i++) {
-			System.out.println("Vector V" + i + 1 + " x = " + table[i].x
-					+ " y = " + table[i].y);
+			System.out.println("Vector V" + i + 1 + " x = " + table[i].x + " y = " + table[i].y);
 		}
 	}
 

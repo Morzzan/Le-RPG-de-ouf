@@ -17,6 +17,8 @@ public class GameMap {
 	private HashMap<VectPerso, Element> grid;
 	private int height;
 	private int width;
+	private int currentTurn;
+	private WaitingBlasts dAL;
 
 	/**
 	 * 
@@ -26,9 +28,15 @@ public class GameMap {
 	GameMap(int width, int height) {
 		this.width = width;
 		this.height = height;
+		currentTurn = 0;
 		grid = new HashMap<VectPerso, Element>();
 		createWalls();
 		this.enemyGen(8);
+		dAL = new WaitingBlasts();
+	}
+
+	public int getCurrentTurn() {
+		return currentTurn;
 	}
 
 	public HashMap<VectPerso, Element> getGrid() {
@@ -47,11 +55,12 @@ public class GameMap {
 	}
 
 	public Hero createHero() {
-		return new Hero(this, 100, 100, new VectPerso(3, 3), 2);
+		return new Hero(this, 100, 15, new VectPerso(3, 3), 2);
 	}
 
 	public void enemyTurn() {
 		List<VectPerso> enemyPosition = new Stack<VectPerso>();
+		dAL.timeToBlow(currentTurn);
 		for (Entry<VectPerso, Element> e : grid.entrySet()) {
 			if (e.getValue() instanceof Enemy) {
 				enemyPosition.add(e.getKey());
@@ -60,6 +69,7 @@ public class GameMap {
 		for (VectPerso k : enemyPosition) {
 			grid.get(k).evolve();
 		}
+		currentTurn++;
 	}
 
 	public Element getElement(VectPerso v) {
@@ -78,6 +88,10 @@ public class GameMap {
 		grid.put(v, e);
 	}
 
+	public WaitingBlasts getdAL() {
+		return dAL;
+	}
+
 	private void enemyGen(int enemyNumber) {
 		VectPerso v = null;
 		Random rand = new Random();
@@ -87,24 +101,5 @@ public class GameMap {
 			} while (this.getElement(v) != null);
 			new Enemy(this, v);
 		}
-	}
-
-	public void show(Hero hero) {
-		VectPerso v = new VectPerso();
-		for (int i = height - 1; i >= 0; i--) {
-			v.setY(i);
-			String line = "";
-			for (int j = 0; j < width; j++) {
-				v.setX(j);
-				Element element = grid.get(v);
-				if (element == null)
-					line += ".";
-				else
-					line += element.getRpz();
-			}
-			System.out.println(line);
-		}
-		System.out.println(hero.toString());
-		hero.showInventory();
 	}
 }

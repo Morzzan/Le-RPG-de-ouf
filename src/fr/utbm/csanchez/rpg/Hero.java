@@ -13,6 +13,7 @@ public class Hero extends GameEntity implements ItemContainer {
 		inventory = new ArrayList<Item>();
 		pickUp(new Potion(null, 2));
 		pickUp(new Bow(null));
+		pickUp(new Wand(null));
 	}
 
 	public List<Item> getInventory() {
@@ -47,7 +48,7 @@ public class Hero extends GameEntity implements ItemContainer {
 		Element toHit = isOnMap.getElement(newPosition);
 		if (toHit instanceof Enemy) {
 			Enemy target = (Enemy) toHit;
-			target.setHp(target.getHp() - getAd() * 100 / (100 + target.getArmor()));
+			target.takeHit(getAd());
 		}
 		if (toHit instanceof Chest && hasSpace()) {
 			Chest toPoor = (Chest) toHit;
