@@ -1,6 +1,7 @@
 package fr.utbm.csanchez.rpg;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -23,6 +24,12 @@ public class GameMap implements Serializable {
 	private int height;
 	private int width;
 	private int currentTurn;
+	private Hero hero;
+
+	public Hero getHero() {
+		return hero;
+	}
+
 	private WaitingBlasts dAL;
 
 	/**
@@ -31,13 +38,19 @@ public class GameMap implements Serializable {
 	 * @param height
 	 */
 
-	GameMap(int width, int height, int n) {
+	GameMap(int width, int height, int roomNumber, int enemyNumber, int chestNumber) {
 		currentTurn = 0;
 		dAL = new WaitingBlasts();
 		this.width = width;
 		this.height = height;
 		grid = new HashMap<VectPerso, Element>();
 
+		createStyleMap(roomNumber);
+		this.chestGen(chestNumber);
+		this.enemyGen(enemyNumber);
+	}
+
+	private void createStyleMap(int n) {
 		fillWalls();
 
 		VectPerso test = new VectPerso();
@@ -73,10 +86,6 @@ public class GameMap implements Serializable {
 		createRoom(new VectPerso(10, 10), new VectPerso(width - 11, height - 11));
 
 		buildCorridor(roomSpot[n - 1], new VectPerso(width - 5, height - 5));
-		ItemStock its = new ItemStock();
-		grid.put(new VectPerso(4, 4), new Chest(this, new VectPerso(4, 4), its.getItemList()));
-
-		this.enemyGen(200);
 	}
 
 	private void buildCorridor(VectPerso one, VectPerso two) {
@@ -121,13 +130,15 @@ public class GameMap implements Serializable {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				new Element("W", this, new VectPerso(i, j));
-				new Element("W", this, new VectPerso(i, j));
 			}
 		}
 	}
 
 	public Hero createHero() {
-		return new Hero(this, 100, 15, new VectPerso(3, 3), 2);
+		Hero newHero = new Hero(this, 100, 15, new VectPerso(3, 3), 2);
+		this.hero = newHero;
+		return newHero;
+
 	}
 
 	public void enemyTurn() {
@@ -185,6 +196,25 @@ public class GameMap implements Serializable {
 				v = new VectPerso(rand.nextInt(this.width - 1), rand.nextInt(this.height - 1));
 			} while (this.getElement(v) != null);
 			new Enemy(this, v);
+		}
+	}
+
+	private void chestGen(int chestNumber) {
+		ItemStock stock = new ItemStock();
+		VectPerso v = null;
+		Random rand = new Random();
+		int i = 0;
+		List<Item> lStock = stock.getItemList();
+		while (i < chestNumber && !lStock.isEmpty()) {
+			int itemIndex = rand.nextInt(lStock.size());
+			Item item = lStock.get(itemIndex);
+			lStock.remove(itemIndex);
+			List<Item> lItem = new ArrayList<Item>();
+			lItem.add(item);
+			do {
+				v = new VectPerso(rand.nextInt(this.width - 1), rand.nextInt(this.height - 1));
+			} while (this.getElement(v) != null);
+			new Chest(this, v, lItem);
 		}
 	}
 }

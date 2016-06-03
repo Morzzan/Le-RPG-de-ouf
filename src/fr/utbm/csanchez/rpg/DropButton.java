@@ -35,8 +35,16 @@ public class DropButton extends JButton implements ActionListener {
 	}
 
 	public void dropItem(Item it) {
-		if (it != null)
+		if (it != null) {
 			it.owner.getInventory().remove(it);
+			if (it.owner instanceof Hero) {
+				Hero hOwner = (Hero) it.owner;
+				hOwner.setAd(hOwner.getAd() - it.getAd());
+				hOwner.setHpMax(hOwner.getHpMax() - it.getHp());
+				hOwner.setHp(hOwner.getHp());
+				hOwner.setArmor(hOwner.getArmor() - it.getArmor());
+			}
+		}
 		for (JButton btn : inventory.getItemList()) {
 			if (btn.isEnabled()) {
 				btn.setBackground(null);
